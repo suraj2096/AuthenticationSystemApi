@@ -9,7 +9,8 @@ namespace AuthenticationSystem.Identity
 {
     public class ApplicationUser:IdentityUser
     {
-        
+        [NotMapped]
+        public string Token { get; set; }
         public string? RefreshToken { get; set; }
         [NotMapped]
         public string? Role { get; set; }

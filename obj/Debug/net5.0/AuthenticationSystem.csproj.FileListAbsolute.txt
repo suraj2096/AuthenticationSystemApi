@@ -27,7 +27,6 @@ D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\Microsoft.IdentityMod
 D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
 D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\Microsoft.OpenApi.dll
-D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\Newtonsoft.Json.dll
 D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\Swashbuckle.AspNetCore.SwaggerUI.dll
@@ -48,7 +47,6 @@ D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\runtimes\win-x86\nati
 D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.pdb
 D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
 D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-D:\officeWork Folder\AuthenticationSystem\obj\Debug\net5.0\AuthenticationSystem.csproj.AssemblyReference.cache
 D:\officeWork Folder\AuthenticationSystem\obj\Debug\net5.0\AuthenticationSystem.GeneratedMSBuildEditorConfig.editorconfig
 D:\officeWork Folder\AuthenticationSystem\obj\Debug\net5.0\AuthenticationSystem.AssemblyInfoInputs.cache
 D:\officeWork Folder\AuthenticationSystem\obj\Debug\net5.0\AuthenticationSystem.AssemblyInfo.cs
@@ -64,3 +62,11 @@ D:\officeWork Folder\AuthenticationSystem\obj\Debug\net5.0\AuthenticationSystem.
 D:\officeWork Folder\AuthenticationSystem\obj\Debug\net5.0\ref\AuthenticationSystem.dll
 D:\officeWork Folder\AuthenticationSystem\obj\Debug\net5.0\AuthenticationSystem.pdb
 D:\officeWork Folder\AuthenticationSystem\obj\Debug\net5.0\AuthenticationSystem.genruntimeconfig.cache
+D:\officeWork Folder\AuthenticationSystem\obj\Debug\net5.0\AuthenticationSystem.csproj.AssemblyReference.cache
+D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\AutoMapper.dll
+D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\Microsoft.Extensions.Options.dll
+D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\Microsoft.Extensions.Primitives.dll
+D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\System.Runtime.CompilerServices.Unsafe.dll
+D:\officeWork Folder\AuthenticationSystem\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
