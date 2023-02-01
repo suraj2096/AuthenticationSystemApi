@@ -20,13 +20,15 @@ namespace AuthenticationSystem.Repository
         }
         public async Task<ApplicationUser> AuthenticateUser(string userName, string userPassword)
         {
-            var user = await _userManager.FindByNameAsync(userName);
-            var userVerification = await _signInManager.CheckPasswordSignInAsync(user, userPassword, false);
+            var userExist = await _userManager.FindByNameAsync(userName);
+            var userVerification = await _signInManager.CheckPasswordSignInAsync(userExist, userPassword, false);
             if (!userVerification.Succeeded) return null;
-            var roleUser = await _userManager.GetRolesAsync(user);
-            user.Role = roleUser.FirstOrDefault();
-            user = _jwtManager.GenerateToken(user);
-            return user;
+            var roleUser = await _userManager.GetRolesAsync(userExist);
+            userExist.Role = roleUser.FirstOrDefault();
+            var  userTokenGenerated = _jwtManager.GenerateToken(userExist);
+
+            // check the user refresh token or  add the user refresh token or update the token.
+               return await AddUserRefreshToken(userTokenGenerated);
          }
 
         public async Task<bool> IsUnique(string userName)
@@ -43,5 +45,24 @@ namespace AuthenticationSystem.Repository
             await _userManager.AddToRoleAsync(userCredentials, userCredentials.Role);
             return true;
         }
+        public async Task<ApplicationUser> AddUserRefreshToken(ApplicationUser user)
+        {
+            var userDetail = await _userManager.UpdateAsync(user);
+            if (userDetail.Succeeded) return user;
+            return null;
+        }
+        public async Task<ApplicationUser> GetUserRefreshToken(ApplicationUser user)
+        {
+            var findUserDetail = await _userManager.FindByNameAsync(user.UserName);
+            if (findUserDetail == null) return null;
+            return findUserDetail;
+        }
+        public async Task<bool> UpdateUserRefreshToken(ApplicationUser user)
+        {
+            var updateUser = await AddUserRefreshToken(user);
+            if (updateUser == null) return false;
+            return true;
+        }
+
     }
 }

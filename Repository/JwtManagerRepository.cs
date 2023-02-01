@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,9 +33,9 @@ namespace AuthenticationSystem.Repository
         }
         public ApplicationUser GenerateJWTToken(ApplicationUser user)
         {
-            var TokenHandler = new JwtSecurityTokenHandler();
+            var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettingJWT.SecretKey);
-            var TokenDescritor = new SecurityTokenDescriptor
+            var tokenDescritor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
@@ -44,14 +45,44 @@ namespace AuthenticationSystem.Repository
                 Expires = DateTime.UtcNow.AddMinutes(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
-            var token = TokenHandler.CreateToken(TokenDescritor);
-            user.Token = TokenHandler.WriteToken(token);
+            var token = tokenHandler.CreateToken(tokenDescritor);
+            user.Token = tokenHandler.WriteToken(token);
+            user.RefreshToken = GenerateRefreshToken();
             return user;
+        }
+        public string GenerateRefreshToken()
+        {
+            var randomeNumber = new byte[32];
+            using (var rNG = RandomNumberGenerator.Create())
+            {
+                rNG.GetBytes(randomeNumber);
+                return Convert.ToBase64String(randomeNumber);
+            }
+
         }
 
         public ClaimsPrincipal GetClaimsFromExpiredToken(string token)
         {
-            throw new NotImplementedException();
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettingJWT.SecretKey);
+            TokenValidationParameters tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ClockSkew = TimeSpan.Zero
+            };
+            try
+            {
+            var claimUserValue = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+            return claimUserValue;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

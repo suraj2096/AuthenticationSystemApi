@@ -16,16 +16,18 @@ namespace AuthenticationSystem.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeRepository _employeeRepository;
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        private readonly IJwtManagerRepository _jwtManagerRepository;
+        public EmployeeController(IEmployeeRepository employeeRepository,IJwtManagerRepository jwtManagerRepository)
         {
             _employeeRepository = employeeRepository;
+            _jwtManagerRepository = jwtManagerRepository;
         }
         [HttpGet]
         public IActionResult GetAll()
         {
-           /* var user = User.Identities;*/
-
-            //return Ok("created successfully");
+            Request.Headers.TryGetValue("Authorization", out var headerValue);
+            var value = headerValue.FirstOrDefault().ToString().Replace("Bearer", " ").Trim();
+            var claim = _jwtManagerRepository.GetClaimsFromExpiredToken(value);
             return Ok(_employeeRepository.GetEmployees());
         }
         [HttpGet("{employeeId:int}")]
