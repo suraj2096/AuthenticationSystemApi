@@ -11,8 +11,6 @@ namespace AuthenticationSystem.Repository.IRepository
          Task<bool> IsUnique(string userName);
          Task<ApplicationUser> AuthenticateUser(string userName, string userPassword);
          Task<bool> RegisterUser(ApplicationUser userCredentials);
-        Task<ApplicationUser> AddUserRefreshToken(ApplicationUser user);
-        Task<ApplicationUser> GetUserRefreshToken(ApplicationUser user);
-        Task<bool> UpdateUserRefreshToken(ApplicationUser user);
+        Task<ApplicationUser> AddOrUpdateUserRefreshToken(ApplicationUser user);
     }
 }

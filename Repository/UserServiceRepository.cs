@@ -25,10 +25,13 @@ namespace AuthenticationSystem.Repository
             if (!userVerification.Succeeded) return null;
             var roleUser = await _userManager.GetRolesAsync(userExist);
             userExist.Role = roleUser.FirstOrDefault();
-            var  userTokenGenerated = _jwtManager.GenerateToken(userExist);
-
+            if (userExist.RefreshTokenValidDate < DateTime.Now)
+            {
+            var  userTokenGenerated = _jwtManager.GenerateToken(userExist,true);
             // check the user refresh token or  add the user refresh token or update the token.
-               return await AddUserRefreshToken(userTokenGenerated);
+               return await AddOrUpdateUserRefreshToken(userTokenGenerated);
+            }
+            return _jwtManager.GenerateToken(userExist, false);
          }
 
         public async Task<bool> IsUnique(string userName)
@@ -45,24 +48,14 @@ namespace AuthenticationSystem.Repository
             await _userManager.AddToRoleAsync(userCredentials, userCredentials.Role);
             return true;
         }
-        public async Task<ApplicationUser> AddUserRefreshToken(ApplicationUser user)
+        public async Task<ApplicationUser> AddOrUpdateUserRefreshToken(ApplicationUser user)
         {
+            user.RefreshTokenValidDate = DateTime.Now.AddDays(10);
             var userDetail = await _userManager.UpdateAsync(user);
             if (userDetail.Succeeded) return user;
             return null;
         }
-        public async Task<ApplicationUser> GetUserRefreshToken(ApplicationUser user)
-        {
-            var findUserDetail = await _userManager.FindByNameAsync(user.UserName);
-            if (findUserDetail == null) return null;
-            return findUserDetail;
-        }
-        public async Task<bool> UpdateUserRefreshToken(ApplicationUser user)
-        {
-            var updateUser = await AddUserRefreshToken(user);
-            if (updateUser == null) return false;
-            return true;
-        }
+      
 
     }
 }

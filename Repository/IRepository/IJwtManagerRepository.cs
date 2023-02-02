@@ -9,8 +9,7 @@ namespace AuthenticationSystem.Repository.IRepository
 {
     public interface IJwtManagerRepository
     {
-       ApplicationUser GenerateToken(ApplicationUser user);
-       ApplicationUser GenerateRefreshToken(ApplicationUser user);
+       ApplicationUser GenerateToken(ApplicationUser user,bool isGenerateRefreshToken);
         ClaimsPrincipal GetClaimsFromExpiredToken(string token);
     }
 }

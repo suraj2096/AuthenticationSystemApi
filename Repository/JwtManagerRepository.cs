@@ -22,16 +22,13 @@ namespace AuthenticationSystem.Repository
             _appSettingJWT = appSettingJWT.Value;
         }
 
-        public ApplicationUser GenerateRefreshToken(ApplicationUser user)
-        {
-            return GenerateJWTToken(user);
-        }
+      
 
-        public ApplicationUser GenerateToken(ApplicationUser user)
+        public ApplicationUser GenerateToken(ApplicationUser user, bool isGenerateRefreshToken=true)
         {
-            return GenerateJWTToken(user);
+            return GenerateJWTToken(user,isGenerateRefreshToken);
         }
-        public ApplicationUser GenerateJWTToken(ApplicationUser user)
+        public ApplicationUser GenerateJWTToken(ApplicationUser user,bool generateRefreshToken)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettingJWT.SecretKey);
@@ -42,12 +39,15 @@ namespace AuthenticationSystem.Repository
                         new Claim(ClaimTypes.Name, user.Id.ToString()),
                         new Claim(ClaimTypes.Role, user.Role)
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddMinutes(5),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescritor);
             user.Token = tokenHandler.WriteToken(token);
+            if (generateRefreshToken)
+            {
             user.RefreshToken = GenerateRefreshToken();
+            }
             return user;
         }
         public string GenerateRefreshToken()
@@ -77,7 +77,10 @@ namespace AuthenticationSystem.Repository
             try
             {
             var claimUserValue = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
-            return claimUserValue;
+                if (validatedToken.ValidTo > DateTime.UtcNow)
+                    return null;
+             return claimUserValue;
+            
             }
             catch
             {

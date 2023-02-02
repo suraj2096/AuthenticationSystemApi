@@ -87,7 +87,8 @@ namespace AuthenticationSystem
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ClockSkew=TimeSpan.Zero
                 };
                 x.Events = new JwtBearerEvents
                 {
@@ -101,7 +102,10 @@ namespace AuthenticationSystem
                     }
                 };
             });
-
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RoleExist", policy => policy.RequireClaim("Roles"));
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -131,22 +135,22 @@ namespace AuthenticationSystem
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRoles>>();
                 // var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                if (!await roleManager.RoleExistsAsync(SD.s_roleManager))
+                if (!await roleManager.RoleExistsAsync(SD.RoleManager))
                 {
                     var role = new ApplicationRoles();
-                    role.Name = SD.s_roleManager;
+                    role.Name = SD.RoleManager;
                     await roleManager.CreateAsync(role);
                 }
-                if (!await roleManager.RoleExistsAsync(SD.s_roleHR))
+                if (!await roleManager.RoleExistsAsync(SD.RoleHR))
                 {
                     var role = new ApplicationRoles();
-                    role.Name = SD.s_roleHR;
+                    role.Name = SD.RoleHR;
                     await roleManager.CreateAsync(role);
                 }
-                if (!await roleManager.RoleExistsAsync(SD.s_roleEmployee))
+                if (!await roleManager.RoleExistsAsync(SD.RoleEmployee))
                 {
                     var role = new ApplicationRoles();
-                    role.Name = SD.s_roleEmployee;
+                    role.Name = SD.RoleEmployee;
                     await roleManager.CreateAsync(role);
                 }
             }*/
